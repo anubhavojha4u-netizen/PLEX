@@ -46,12 +46,16 @@ function setupWx() {
     ls.set(NAMEK, v.by); ls.set(LASTWX, v); enqueue('wx', { id: uid(), ...v, at: new Date().toISOString() });
     const sent = await flush(); toast(sent ? 'Report sent ✓' : 'Saved – it will be sent when the network is back'); f.t.value = localIso(new Date()); });
 }
-function setupOps(plan) {
+function setupOps(plan, entries) {
   const f = $('#ops'); f.hidden = false; $('#title').textContent = 'MLU operation update'; $('#sub').textContent = 'Platinum Explorer · 1–3-hourly updates';
-  const last = ls.get('plexLastT1', ''); const now = new Date(); now.setMinutes(Math.floor(now.getMinutes() / 15) * 15);
-  f.t1.value = localIso(now); f.t0.value = last || localIso(new Date(now - 3 * 36e5)); f.by.value = ls.get(NAMEK, '');
+  // pre-fill from the latest update (whoever sent it): same activity, status and line – usually only the depth and times change
+  const prev = (entries || []).filter((e) => e.state !== 'no' && e.t1).sort((a, b) => (a.t1 < b.t1 ? 1 : -1))[0];
+  const now = new Date(); now.setMinutes(Math.floor(now.getMinutes() / 15) * 15);
+  const lastT1 = prev ? String(prev.t1).slice(0, 16) : ls.get('plexLastT1', '');
+  f.t1.value = localIso(now); f.t0.value = lastT1 || localIso(new Date(now - 3 * 36e5)); f.by.value = ls.get(NAMEK, '') || (prev && prev.by) || '';
+  if (prev) { f.op.value = prev.op || ''; f.depth.value = prev.depth || ''; if (prev.status) f.status.value = prev.status; $('#prefill').hidden = false; }
   const lines = (plan && plan.lines) || [], sel = f.la;
-  lines.filter((l) => l.st !== 'done').slice(0, 8).forEach((l) => { const o = document.createElement('option'); o.value = l.seq; o.textContent = `${l.seq} – ${String(l.op).slice(0, 60)}`; if (plan && l.seq === plan.cur) o.selected = true; sel.appendChild(o); });
+  lines.filter((l) => l.st !== 'done').slice(0, 8).forEach((l) => { const o = document.createElement('option'); o.value = l.seq; o.textContent = `${l.seq} – ${String(l.op).slice(0, 60)}`; if (prev && prev.la !== '' && prev.la != null ? +prev.la === +l.seq : plan && l.seq === plan.cur) o.selected = true; sel.appendChild(o); });
   f.addEventListener('submit', async (e) => { e.preventDefault(); const err = $('.err', f); err.textContent = '';
     if (!numbersOk(f)) { err.textContent = 'Check the depth.'; return; }
     const v = values(f); if (!v.t0 || !v.t1 || !v.op) { err.textContent = 'Fill in from, to and the activity.'; return; }
@@ -60,7 +64,7 @@ function setupOps(plan) {
     ls.set(NAMEK, v.by); ls.set('plexLastT1', v.t1);
     enqueue('ops', { id: uid(), t0: v.t0, t1: v.t1, op: v.op, depth: v.depth, status: v.status, la: v.la, by: v.by, at: new Date().toISOString(), par: {} });
     const sent = await flush(); toast(sent ? 'Update sent ✓' : 'Saved – it will be sent when the network is back');
-    f.op.value = ''; f.depth.value = ''; f.t0.value = v.t1; const n = new Date(); n.setMinutes(Math.floor(n.getMinutes() / 15) * 15); f.t1.value = localIso(n); });
+    f.t0.value = v.t1; f.depth.focus(); const n = new Date(); n.setMinutes(Math.floor(n.getMinutes() / 15) * 15); f.t1.value = localIso(n); });
 }
 async function refresh() {
   try { const j = await get(); const L = $('#recent-list'); L.innerHTML = ''; const Q = queue();
@@ -75,7 +79,7 @@ async function begin() {
   ROLE = KEY.startsWith('bridge-') ? 'bridge' : KEY.startsWith('mlu-') ? 'mlu' : '';
   if (!ROLE) { $('#code').hidden = false; $('#code-err').textContent = KEY ? 'That is not a report code. Mud logging codes start with mlu-, bridge codes with bridge-.' : ''; return; }
   let j = null; try { j = await refresh(); } catch (e) { ls.set(KEYK, ''); $('#code').hidden = false; $('#code-err').textContent = 'That code is not accepted. Check the link you were given.'; return; }
-  if (ROLE === 'bridge') setupWx(); else setupOps(j && j.plan);
+  if (ROLE === 'bridge') setupWx(); else setupOps(j && j.plan, j && j.entries);
   flush(); setInterval(flush, 30000); window.addEventListener('online', flush);
 }
 (function start() {

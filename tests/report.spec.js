@@ -58,3 +58,12 @@ test('asks for a code when the link has none', async ({ page }) => {
   await mock(page); await page.goto('/report.html');
   await expect(page.locator('#code')).toBeVisible();
 });
+
+test('MLU form is pre-filled from the last update', async ({ page }) => {
+  await page.route('https://script.google.com/**', (route) => route.fulfill({ json: { ok: true, wx: [], entries: [{ id: 'a', t0: '2026-11-25T15:00', t1: '2026-11-25T16:30', op: 'POOH 4-1/2" wedge tubing', depth: '1153', status: 'P', la: 23, by: 'MLU-1', state: '' }], plan: { cur: 23, lines: [{ seq: 23, op: 'POOH tubing', st: 'now' }] } } }));
+  await page.goto('/report.html#k=' + ML);
+  await expect(page.locator('[name=op]')).toHaveValue('POOH 4-1/2" wedge tubing');
+  await expect(page.locator('[name=t0]')).toHaveValue('2026-11-25T16:30');
+  await expect(page.locator('[name=depth]')).toHaveValue('1153');
+  await expect(page.locator('#prefill')).toBeVisible();
+});
