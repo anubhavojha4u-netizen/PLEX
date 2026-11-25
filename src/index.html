@@ -22,7 +22,21 @@
   <section id="splash" class="screen" aria-label="Opening PLEX">
     <div class="mark" aria-hidden="true">PLEX</div>
     <h1>Platinum Explorer</h1>
-    <div class="well" aria-hidden="true"><i class="pipe"></i><i class="bit"></i></div>
+    <div class="well" aria-hidden="true" data-stage="0"><svg viewBox="0 0 240 300" width="210" height="262">
+      <defs><linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dbe8f3"/><stop offset="1" stop-color="#b9cfe2"/></linearGradient>
+        <linearGradient id="rock" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9e1d6"/><stop offset="1" stop-color="#d4c7b5"/></linearGradient>
+        <radialGradient id="fl" cx=".5" cy=".7" r=".6"><stop offset="0" stop-color="#fff3b0"/><stop offset=".45" stop-color="#ffb02e"/><stop offset="1" stop-color="#e2461b" stop-opacity="0"/></radialGradient></defs>
+      <rect x="0" y="62" width="240" height="78" fill="url(#sea)"/><rect x="0" y="140" width="240" height="160" fill="url(#rock)"/>
+      <g class="ship"><path d="M52 58 L188 58 L178 70 L62 70 Z" fill="#44546b"/><path d="M104 58 L120 14 L136 58" fill="none" stroke="#44546b" stroke-width="3"/><path d="M110 40 H130 M107 49 H133" stroke="#44546b" stroke-width="2"/>
+        <path class="boom" d="M180 60 L226 30" stroke="#44546b" stroke-width="3.5" stroke-linecap="round"/><g class="flare"><ellipse cx="230" cy="10" rx="16" ry="26" fill="url(#fl)" opacity=".85"/><ellipse cx="229" cy="16" rx="10" ry="17" fill="#ffb02e"/><ellipse cx="229" cy="22" rx="5" ry="9" fill="#fff6cf"/></g></g>
+      <g class="riser"><line x1="120" y1="70" x2="120" y2="132" stroke="#7a1f2b" stroke-width="3"/><rect x="113" y="128" width="14" height="10" rx="2" fill="#7a1f2b"/></g>
+      <g class="c c36"><rect x="96" y="138" width="48" height="30" fill="#c9bfb1"/><path d="M98 136 V168 M142 136 V168" stroke="#7a1f2b" stroke-width="3"/><path d="M98 168 l5 -5 M142 168 l-5 -5" stroke="#7a1f2b" stroke-width="3"/><text x="150" y="166">36"</text></g>
+      <g class="c c20"><rect x="102" y="166" width="36" height="34" fill="#c9bfb1"/><path d="M104 138 V200 M136 138 V200" stroke="#7a1f2b" stroke-width="2.6"/><path d="M104 200 l4 -4 M136 200 l-4 -4" stroke="#7a1f2b" stroke-width="2.6"/><text x="150" y="199">20"</text></g>
+      <g class="c c13"><rect x="107" y="198" width="26" height="36" fill="#c9bfb1"/><path d="M109 138 V234 M131 138 V234" stroke="#7a1f2b" stroke-width="2.2"/><path d="M109 234 l3 -3 M131 234 l-3 -3" stroke="#7a1f2b" stroke-width="2.2"/><text x="150" y="233">13⅜"</text></g>
+      <g class="c c9"><rect x="111" y="232" width="18" height="40" fill="#c9bfb1"/><path d="M113 138 V272 M127 138 V272" stroke="#7a1f2b" stroke-width="2"/><path d="M113 272 l3 -3 M127 272 l-3 -3" stroke="#7a1f2b" stroke-width="2"/><text x="150" y="271">9⅝"</text></g>
+      <g class="perf"><path d="M108 280 h-9 M108 286 h-9 M132 280 h9 M132 286 h9" stroke="#e2461b" stroke-width="2.5" stroke-linecap="round"/></g>
+      <g class="ds"><rect class="pipe2" x="119" y="40" width="2" height="242" fill="#13213a"/><path class="bit2" d="M115 160 h10 l-5 7 z" fill="#13213a"/></g>
+    </svg><div class="ph" id="phase"></div></div>
     <p id="status" role="status">Opening…</p>
     <p id="detail" class="small"></p>
   </section>

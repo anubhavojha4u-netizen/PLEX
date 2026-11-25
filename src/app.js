@@ -12,11 +12,17 @@ const state = { key: '', loadedAt: 0, url: '', running: false };
 
 // ---------- small helpers ----------
 function show(name) { screens.forEach((s) => { $(s).hidden = s !== name; }); $('view').hidden = name !== 'view'; }
+const PHASES = ['Drilling 42" hole', '36" conductor set', '20" casing set – BOP on', '13⅜" casing set', '9⅝" casing set', 'Testing – flare on'];
+let stageTimer = null;
+function stage(n) { const w = document.querySelector('.well'); if (!w) return; w.dataset.stage = String(n); const p = $('phase'); if (p) p.textContent = PHASES[n] || ''; }
 function status(text, detail = '', depth = null) {
   $('status').textContent = text; $('detail').textContent = detail;
-  const w = document.querySelector('.well');
-  if (depth == null) { w.classList.add('busy'); } else { w.classList.remove('busy'); w.style.setProperty('--depth', `${Math.max(8, Math.min(96, depth))}%`); }
+  clearInterval(stageTimer);
+  if (depth == null) { // waiting for the network: the well keeps being built, one phase at a time
+    let n = 0; stage(0); if (!matchMedia('(prefers-reduced-motion: reduce)').matches) stageTimer = setInterval(() => { n = (n + 1) % 6; stage(n); }, 900); else stage(4);
+  } else stage(depth >= 92 ? 5 : depth >= 70 ? 4 : depth >= 45 ? 3 : depth >= 20 ? 2 : 1);
 }
+const pause = (ms) => new Promise((r) => setTimeout(r, ms));
 function chip(text, off = false) { const c = $('chip'); c.textContent = text; c.classList.toggle('off', off); c.hidden = false; clearTimeout(chip.t); chip.t = setTimeout(() => { c.hidden = true; }, 6000); }
 function toast(text, label, action) { $('toast-t').textContent = text; const b = $('toast-b'); b.textContent = label; b.onclick = () => { $('toast').hidden = true; action(); }; $('toast').hidden = false; }
 const fmtTime = (t) => { const d = new Date(t); const p = (n) => String(n).padStart(2, '0'); return `${p(d.getDate())}.${p(d.getMonth() + 1)} ${p(d.getHours())}:${p(d.getMinutes())}`; };
@@ -65,10 +71,10 @@ async function run({ quiet = false } = {}) {
       if (!eng || eng.at !== boot.engineAt) {
         if (!quiet) status('Updating PLEX', 'only after a new version', 15);
         const e = await api('get=engine', (n) => { if (!quiet) status('Updating PLEX', `${mb(n)} received`, 15 + Math.min(70, (n / 6.5e6) * 70)); });
-        eng = { at: e.at, html: e.html }; await kvPut('engine', eng);
+        eng = { at: e.at, html: e.html }; await kvPut('engine', eng); state.fresh = true;
       }
       await kvPut('boot', boot.boot);
-      if (!quiet) status('Building the pages on this device…', '', 92);
+      if (!quiet) { status(state.fresh ? 'PLEX updated' : 'Building the pages on this device…', '', 92); if (state.fresh) await pause(1400); state.fresh = false; }
       present(withBoot(eng.html, boot.boot), `Updated ${fmtTime(Date.now())}`);
     } else {
       const v = await api('get=view'); await kvPut('view', v);

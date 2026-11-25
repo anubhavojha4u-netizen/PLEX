@@ -1,6 +1,10 @@
 # Changelog
 
 
+
+## 1.5.0 – 2026-11-25
+### Changed
+- Opening screen draws the well phase by phase – 42" hole, 36" conductor, 20" casing with BOP and riser, 13⅜", 9⅝", then perforation and the flare on the flare boom; while PLEX downloads a new version the flare burns before the pages open. Respects reduced motion.
 ## 1.4.0 – 2026-11-25
 ### Added
 - `news.html` – Ideas & news: the weekly PLEX research run writes `news.json` (new technology worth using, problems found, suggested fixes); cards open to detail and https source links only. Opened from More › Ideas & news in the app. 2 tests (34 in total).

@@ -17,15 +17,28 @@ p { margin: 4px 0; color: var(--ink-2); max-width: 34ch; }
 .small { font-size: 13.5px; }
 .err { color: #b42318; font-size: 14px; min-height: 1.4em; }
 
-/* loader: a drill string going down hole – the depth is the progress */
-.well { position: relative; width: 6px; height: 120px; margin: 18px 0 10px; border-radius: 3px; background: linear-gradient(#e6ebf2, #d5dde8); overflow: hidden; }
-.pipe { position: absolute; left: 1px; right: 1px; top: 0; height: var(--depth, 18%); background: var(--maroon); border-radius: 2px; transition: height .5s ease; }
-.bit { position: absolute; left: -3px; width: 12px; height: 8px; top: calc(var(--depth, 18%) - 4px); background: var(--maroon-2);
-  clip-path: polygon(0 0, 100% 0, 50% 100%); transition: top .5s ease; }
-.well.busy .pipe { animation: drill 1.6s ease-in-out infinite; }
-.well.busy .bit { animation: drillbit 1.6s ease-in-out infinite; }
-@keyframes drill { 0% { height: 10%; } 70% { height: 88%; } 100% { height: 10%; } }
-@keyframes drillbit { 0% { top: calc(10% - 4px); } 70% { top: calc(88% - 4px); } 100% { top: calc(10% - 4px); } }
+/* loader: the well is built phase by phase – 36" conductor, 20", 13⅜", 9⅝" casing, then the test and the flare */
+.well { display: flex; flex-direction: column; align-items: center; margin: 10px 0 4px; }
+.well svg { display: block; overflow: visible; }
+.well text { font: 700 12px var(--font); fill: var(--ink-2); }
+.well .c, .well .riser, .well .perf, .well .flare { opacity: 0; transition: opacity .45s ease; }
+.well .pipe2 { transform-box: view-box; transform-origin: 120px 40px; } .well .ds rect, .well .ds path { transition: transform .6s ease; }
+.well[data-stage="1"] .c36, .well[data-stage="2"] .c36, .well[data-stage="3"] .c36, .well[data-stage="4"] .c36, .well[data-stage="5"] .c36 { opacity: 1; }
+.well[data-stage="2"] .c20, .well[data-stage="3"] .c20, .well[data-stage="4"] .c20, .well[data-stage="5"] .c20,
+.well[data-stage="2"] .riser, .well[data-stage="3"] .riser, .well[data-stage="4"] .riser, .well[data-stage="5"] .riser { opacity: 1; }
+.well[data-stage="3"] .c13, .well[data-stage="4"] .c13, .well[data-stage="5"] .c13 { opacity: 1; }
+.well[data-stage="4"] .c9, .well[data-stage="5"] .c9, .well[data-stage="5"] .perf, .well[data-stage="5"] .flare { opacity: 1; }
+.well[data-stage="0"] .pipe2 { transform: scaleY(.529); } .well[data-stage="0"] .bit2 { transform: translateY(8px); }
+.well[data-stage="1"] .pipe2 { transform: scaleY(.661); } .well[data-stage="1"] .bit2 { transform: translateY(40px); }
+.well[data-stage="2"] .pipe2 { transform: scaleY(.802); } .well[data-stage="2"] .bit2 { transform: translateY(74px); }
+.well[data-stage="3"] .pipe2 { transform: scaleY(.959); } .well[data-stage="3"] .bit2 { transform: translateY(112px); }
+.well[data-stage="4"] .pipe2, .well[data-stage="5"] .pipe2 { transform: scaleY(1); } .well[data-stage="4"] .bit2, .well[data-stage="5"] .bit2 { transform: translateY(122px); }
+.well[data-stage="5"] .ds { opacity: .35; }
+.well .flare { transform-box: view-box; transform-origin: 229px 32px; }
+.well[data-stage="5"] .flare { animation: flame .45s ease-in-out infinite alternate; }
+@keyframes flame { from { transform: scale(.92, .9) rotate(-3deg); } to { transform: scale(1.06, 1.12) rotate(3deg); } }
+.ph { font-size: 13px; font-weight: 600; color: var(--maroon); min-height: 1.3em; margin-top: 2px; }
+@media (prefers-reduced-motion: reduce) { .well[data-stage="5"] .flare { animation: none; } .well .ds rect, .well .ds path, .well .c { transition: none; } }
 
 form { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; justify-content: center; }
 input { font: inherit; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; width: min(280px, 80vw); background: #fff; color: var(--ink); }
