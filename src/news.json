@@ -1,1 +1,174 @@
-{"at": "", "next": "", "items": []}
+{
+ "at": "2026-11-25T17:54:58Z",
+ "next": "2026-12-02T17:54:58Z",
+ "items": [
+  {
+   "type": "fix",
+   "title": "Publishing workflow uses older action versions",
+   "summary": "All five GitHub Actions steps that test and publish the phone app are one major version behind the current releases.",
+   "detail": [
+    "The workflow that tests PLEX and publishes it to GitHub Pages uses checkout v5, setup-node v5, configure-pages v5, upload-pages-artifact v4 and deploy-pages v4. The newest published versions are checkout v7, setup-node v7, configure-pages v6, upload-pages-artifact v5 and deploy-pages v5.",
+    "It still works today (the last runs all succeeded), but older major versions stop getting fixes and GitHub eventually retires the runtimes they are built on. When that happens the publish step fails and phones stop receiving updates.",
+    "How: change the version numbers in .github/workflows/pages.yml one or two at a time, read each release note for changed inputs, push, and confirm the run is green. Effort: about 30 minutes."
+   ],
+   "links": [
+    {
+     "title": "actions/checkout – tags",
+     "url": "https://github.com/actions/checkout/tags"
+    },
+    {
+     "title": "actions/setup-node – tags",
+     "url": "https://github.com/actions/setup-node/tags"
+    },
+    {
+     "title": "actions/upload-pages-artifact – tags",
+     "url": "https://github.com/actions/upload-pages-artifact/tags"
+    },
+    {
+     "title": "actions/deploy-pages – tags",
+     "url": "https://github.com/actions/deploy-pages/tags"
+    },
+    {
+     "title": "actions/configure-pages – tags",
+     "url": "https://github.com/actions/configure-pages/tags"
+    }
+   ]
+  },
+  {
+   "type": "fix",
+   "title": "Test tool is two releases behind",
+   "summary": "The app's automatic tests are pinned to Playwright 1.63.0 while 1.65.1 is the current release.",
+   "detail": [
+    "Playwright is the tool that opens the app in a simulated iPhone and desktop browser and checks every page before publishing. All 34 tests pass today on 1.63.0.",
+    "Newer versions bring newer browser builds, so the tests stay closer to what Edge and Safari actually do. Staying many versions behind makes the eventual jump harder.",
+    "How: set @playwright/test to 1.65.1 in package.json, run npm install, run the tests, commit package.json and package-lock.json together. Effort: 15 minutes."
+   ],
+   "links": [
+    {
+     "title": "@playwright/test on npm",
+     "url": "https://www.npmjs.com/package/@playwright/test"
+    }
+   ]
+  },
+  {
+   "type": "news",
+   "title": "Ollama now uses Intel graphics out of the box",
+   "summary": "Since version 0.30 Ollama switches on Vulkan graphics acceleration by default, which covers Intel integrated and Arc graphics.",
+   "detail": [
+    "Ollama is the optional local model runner behind Ask PLEX on the laptop. Its June 2026 release turned on Vulkan by default, so AMD and Intel graphics are used without extra vendor libraries. The same release improved loading of GGUF model files through llama.cpp.",
+    "For PLEX this means Ask PLEX answers can run on the laptop's Intel graphics instead of only the processor, which usually gives quicker replies and leaves the processor free for the rest of the app.",
+    "How: update Ollama on the laptop to 0.30 or later, run a short question and watch the graphics load in Task Manager. A GGUF file copied onto the laptop can be added offline with a one-line Modelfile (FROM ./file.gguf) and ollama create. The sources give no speed figures for Intel graphics, so time a few typical questions before and after. Effort: under an hour."
+   ],
+   "links": [
+    {
+     "title": "Ollama blog – Improved performance and model support with GGUF",
+     "url": "https://ollama.com/blog/improved-performance-and-model-support-with-gguf"
+    },
+    {
+     "title": "AlternativeTo – Ollama 0.30 delivers wider hardware support",
+     "url": "https://alternativeto.net/news/2026/6/ollama-0-30-delivers-faster-nvidia-gpu-performance-and-wider-hardware-support/"
+    }
+   ]
+  },
+  {
+   "type": "news",
+   "title": "OpenVINO 2026.3/2026.4: bigger models on 16 GB",
+   "summary": "Intel's OpenVINO can now keep part of a large mixture-of-experts model on disk, so a 30-billion-parameter Qwen model runs on a 16 GB machine.",
+   "detail": [
+    "OpenVINO is Intel's own engine for running models on Intel processors, graphics and the NPU. Version 2026.3 (August 2026) added disk offloading for mixture-of-experts models; Intel says this lets Qwen3-30B-A3B work on systems with 16 GB of memory. Version 2026.4 (September 2026) made Gemma 4 faster on Intel graphics and added faster guessing-ahead decoding for Gemma 4 and Qwen3.5/3.6.",
+    "For PLEX this is the alternative to Ollama when answers need a stronger model than the small ones that fit fully in memory, for example summarising a whole week of reports.",
+    "Caution from the release notes: some NPU drivers crash; Intel recommends NPU driver 32.0.100.5540 or later. Try it on the laptop as a side test before relying on it. Effort: half a day to install and compare with Ollama."
+   ],
+   "links": [
+    {
+     "title": "OpenVINO release notes",
+     "url": "https://docs.openvino.ai/releasenotes"
+    },
+    {
+     "title": "Edge AI and Vision Alliance – Intel releases OpenVINO 2026.3",
+     "url": "https://www.edge-ai-vision.com/?p=59176"
+    }
+   ]
+  },
+  {
+   "type": "idea",
+   "title": "Hidden-risk tagging of report remarks",
+   "summary": "Operators now use small fine-tuned language models to find risks written into report lines that were booked as productive time.",
+   "detail": [
+    "SLB describes tagging daily drilling report remarks into 13 risk classes, aimed at lines coded as normal operations that still describe a problem. A fine-tuned 7-billion-parameter model agreed with engineers on 94% of 342 checked remarks from 180 reports (about 96% after a second review). At the IADC technology forum in March 2026, a talk on retrieval-based IADC code assignment across four rigs reported more than half the report preparation time saved.",
+    "For PLEX this fits the invisible lost time analytics: lines booked as productive but mentioning waiting, repeat runs, or equipment trouble are exactly where invisible lost time hides.",
+    "How: keep a fixed list of risk tags, hand-label a few hundred past remarks once, then let the local model (Ollama) suggest a tag for each new line with those labelled examples in the prompt. Show suggestions for the Company Man to accept or reject and feed the answers back into the examples. Effort: two to three days."
+   ],
+   "links": [
+    {
+     "title": "SLB – Extracting drilling risks from daily drilling reports using generative AI",
+     "url": "https://ai.slb.com/blog/extract-drill-risk-genai"
+    },
+    {
+     "title": "IADC Drilling Engineering Committee Q1 2026 forum proceedings",
+     "url": "https://iadc.org/wp-content/uploads/2026/04/DECQ12026_Proceedings.pdf"
+    }
+   ]
+  },
+  {
+   "type": "idea",
+   "title": "Data audit and job pace with conformal limits",
+   "summary": "Conformal control limits flag an unusual job time or data value without assuming the numbers follow a bell curve.",
+   "detail": [
+    "A December 2025 paper shows how to build control-chart limits from a set of past normal values: score each value by its distance from the median, and take the matching rank as the alarm limit. Any new value gets a p-value, a simple 0 to 1 measure of how unusual it is compared with the past.",
+    "For PLEX this suits small data: the hourly data audit and the learning loop for job pace have tens of past jobs, not thousands. Each new casing run, trip or BOP test can be scored against its own past jobs, and flagged when it falls outside the band instead of using a fixed percentage.",
+    "How: for each job type keep the last 20 to 30 durations, compute the median and sorted distances, and show the band (for example 90%) on the lookahead and an alert when a value falls outside it. The author warns that the band is only as good as the past jobs chosen, so exclude jobs with known breakdowns. Effort: one day in the engine."
+   ],
+   "links": [
+    {
+     "title": "arXiv – Distribution-free process monitoring with conformal prediction",
+     "url": "https://arxiv.org/abs/2512.23602"
+    }
+   ]
+  },
+  {
+   "type": "news",
+   "title": "iPhone: any page can be a home-screen app",
+   "summary": "Since iOS 26, Safari opens anything added to the home screen as a full-screen web app and also supports WebGPU.",
+   "detail": [
+    "With iOS and iPadOS 26, adding a site to the home screen opens it as a web app by default; a manifest and service worker are no longer needed for that. Safari 26 also added WebGPU (graphics-card computing in the browser) and the File System WritableStream API for writing files.",
+    "For PLEX the bridge report page and the upload page can each be added as their own home-screen icon on the bridge and store phones, opening straight to the form without the main app. WebGPU on iPhone also makes in-browser models possible later: Transformers.js version 4 runs models on WebGPU and can cache them for offline use after the first download.",
+    "How: send the bridge team the report link and ask them to use Share › Add to Home Screen with Open as web app switched on. In-browser models are a later experiment, not urgent. Effort: minutes for the icons."
+   ],
+   "links": [
+    {
+     "title": "heise – iOS 26: changed web app behaviour on the home screen",
+     "url": "https://heise.de/-10749652"
+    },
+    {
+     "title": "Apple – Safari 26.0 release notes",
+     "url": "https://developer.apple.com/documentation/safari-release-notes/safari-26-release-notes.md"
+    },
+    {
+     "title": "Hugging Face – Transformers.js v4",
+     "url": "https://huggingface.co/blog/transformersjs-v4"
+    }
+   ]
+  },
+  {
+   "type": "news",
+   "title": "Apps Script: no quota changes this quarter",
+   "summary": "Google's Apps Script release notes since August 2026 list no quota, Gmail, Drive or Sheets changes that affect PLEX Cloud.",
+   "detail": [
+    "The only Apps Script entries since August 2026 are the Gemini helper panel in the script editor (generally available in November) and data-region controls for Enterprise Plus and some education accounts (September). Data regions do not apply to an ordinary personal account.",
+    "For PLEX Cloud nothing needs to change. The Gemini panel can help when editing the script, but suggestions must be read before accepting, since the script holds access checks.",
+    "Effort: none."
+   ],
+   "links": [
+    {
+     "title": "Google Apps Script release notes",
+     "url": "https://developers.google.com/apps-script/releases"
+    },
+    {
+     "title": "Workspace Updates – Data regions for Apps Script generally available",
+     "url": "https://workspaceupdates.googleblog.com/2026/09/data-regions-support-for-google-apps-script-now-generally-available.html?m=1"
+    }
+   ]
+  }
+ ]
+}
