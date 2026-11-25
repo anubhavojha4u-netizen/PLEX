@@ -1,0 +1,14 @@
+{
+  "name": "plex-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PLEX – installable web app for Platinum Explorer well delivery status (shell only; data from PLEX Cloud).",
+  "type": "module",
+  "scripts": {
+    "serve": "npx http-server src -p 8080 -c-1",
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0"
+  }
+}
