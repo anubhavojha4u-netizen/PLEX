@@ -5,5 +5,5 @@ export const CONFIG = Object.freeze({
   refreshMinutes: 30,        // background refresh while the app is open
   staleMinutes: 10,          // refresh on return to the app after this long
   rig: 'Platinum Explorer',
-  version: '1.3.0'
+  version: '1.4.0'
 });

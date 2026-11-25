@@ -1,5 +1,9 @@
 # Changelog
 
+
+## 1.4.0 – 2026-11-25
+### Added
+- `news.html` – Ideas & news: the weekly PLEX research run writes `news.json` (new technology worth using, problems found, suggested fixes); cards open to detail and https source links only. Opened from More › Ideas & news in the app. 2 tests (34 in total).
 ## 1.3.0 – 2026-11-25
 ### Added
 - `upload.html` – PLEX upload page: anyone with an upload code sends rig files (inventory, lookahead, bulk report, DPR, mud report, forecast, cost sheet) to PLEX Cloud; drag-and-drop or picker, several files at once, kind detected from the name, list of files received.
