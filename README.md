@@ -39,4 +39,5 @@ New PLEX engine versions do not need a release: they are uploaded from the lapto
 | `src/app.js` | boot, engine cache (IndexedDB), offline fallback, refresh, install hint |
 | `src/config.js` | PLEX Cloud address and refresh timings |
 | `src/sw.js` | offline app shell, update prompt |
+| `src/report.html`, `report.js`, `report.css` | report page: MLU operation updates (code `mlu-…`) and bridge weather / marine / riser reports (code `bridge-…`); offline outbox |
 | `tests/` | Playwright end-to-end tests with a mocked API |
