@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src https://script.google.com https://script.googleusercontent.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>PLEX upload</title>
+<meta name="theme-color" content="#7a1f2b">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+<header class="top"><div class="mark" aria-hidden="true">PLEX</div><div><h1>Send files to PLEX</h1><p class="small">Platinum Explorer</p></div><span id="net" class="net" role="status"></span></header>
+<main>
+  <section id="code" class="card" hidden aria-labelledby="code-h">
+    <h2 id="code-h">Enter your upload code</h2>
+    <form id="codeform" autocomplete="off"><label for="codein" class="sr">Upload code</label><input id="codein" autocapitalize="off" spellcheck="false" placeholder="upl-…" required><button type="submit">Continue</button></form>
+    <p id="code-err" class="err" role="alert"></p>
+  </section>
+
+  <section id="drop" class="card" hidden aria-labelledby="drop-h">
+    <h2 id="drop-h">Choose the files</h2>
+    <label class="dz" for="files"><input id="files" type="file" multiple accept=".xlsx,.xlsm,.xls,.docx,.pdf,.csv,.txt"><span class="dz-big">Tap to choose, or drop files here</span>
+      <span class="small">Rig inventory · lookahead · bulk report · DPR · mud report · forecast · well cost sheet</span></label>
+    <label class="by">Your name / company<input id="by" autocomplete="organization" placeholder="e.g. Store keeper, Vantage"></label>
+    <ul id="list" class="files" aria-live="polite"></ul>
+    <button id="send" type="button" disabled>Send</button>
+    <p class="small note">Crew lists, POB and chopper manifests are not accepted here – they stay with the Company Man.</p>
+  </section>
+
+  <section id="recent" class="card" hidden aria-labelledby="rec-h">
+    <h2 id="rec-h">Received</h2>
+    <ul id="rec" class="files"></ul>
+  </section>
+</main>
+<script type="module" src="upload.js"></script>
+</body>
+</html>

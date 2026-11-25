@@ -41,3 +41,7 @@ New PLEX engine versions do not need a release: they are uploaded from the lapto
 | `src/sw.js` | offline app shell, update prompt |
 | `src/report.html`, `report.js`, `report.css` | report page: MLU operation updates (code `mlu-…`) and bridge weather / marine / riser reports (code `bridge-…`); offline outbox |
 | `tests/` | Playwright end-to-end tests with a mocked API |
+
+
+## Upload page
+`upload.html#k=<upload code>` – for the store keeper, logistics, MLU and service companies. Files go to the PLEX Cloud inbox; the Company Man laptop and the phone app read them within 10 minutes, apply only files newer than the version in use, and update every page. Crew/POB/manifest files are refused.

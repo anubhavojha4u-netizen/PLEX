@@ -1,4 +1,12 @@
 # Changelog
+
+## 1.3.0 – 2026-11-25
+### Added
+- `upload.html` – PLEX upload page: anyone with an upload code sends rig files (inventory, lookahead, bulk report, DPR, mud report, forecast, cost sheet) to PLEX Cloud; drag-and-drop or picker, several files at once, kind detected from the name, list of files received.
+- Crew, POB and manifest files are refused on the device (and again on the server).
+- Tests for the upload page (6 new, 30 in total).
+### Requires
+- PLEX Cloud script v8 (action `file`, `get=uploads`, `get=inbox`, role `upload`).
 ## 1.2.0 – 25.11.2026
 - MLU form pre-filled from the latest update (activity, depth, status, lookahead line; "from" = last "to"), so a repeat update only needs the new depth.
 ## 1.1.0 – 25.11.2026
